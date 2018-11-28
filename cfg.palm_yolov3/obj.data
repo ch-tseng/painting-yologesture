@@ -1,0 +1,5 @@
+classes= 6
+train  = cfg.palm_yolov3/train.txt
+valid  = cfg.palm_yolov3/test.txt
+names = cfg.palm_yolov3/obj.names
+backup = cfg.palm_yolov3/
