@@ -6,8 +6,9 @@ import numpy as np
 
 drawThreshold = 12  #counts for really painting
 
-yolo = pydarknetYOLO(obdata="cfg.palm_yolov3/obj.data", weights="yolov3_11600.weights", 
-    cfg="cfg.palm_yolov3/yolov3.cfg")
+yolo = pydarknetYOLO(obdata="cfg.paintOnAir/obj.data", \
+    weights="cfg.paintOnAir/yolov3_40000.weights", \
+    cfg="cfg.paintOnAir/yolov3.cfg")
 video_out = "realtime.avi"
 
 start_time = time.time()
@@ -61,7 +62,7 @@ if __name__ == "__main__":
         labels, scores, boxes = yolo.getObject(frame, labelWant="", drawBox=True, bold=1, textsize=0.85, bcolor=(255,255,255), tcolor=(0,255,0))
 
         if(len(labels)>0):
-            if(labels[0]=='1'):
+            if(labels[0]=='fingertip'):
                 accDrawCount += 1
                 if(accDrawCount>drawThreshold):
                     modeNow = "painting"
@@ -77,20 +78,20 @@ if __name__ == "__main__":
             else:
                 accDrawCount = 0
                 lastDrawPoint = (0,0)
-                if(labels[0]=='5'):
+                if(labels[0]=='palm'):
                     modeNow = "eraser"
                     center_x = boxes[0][0] + int(boxes[0][2]/2)
                     center_y = boxes[0][1] + int(boxes[0][3]/2)
                     layerPaint = drawPoint(layerPaint, (0,0,0), int(boxes[0][2]/2), (center_x, center_y))
                     print("clear it.")
-                elif(labels[0]=='3'):
-                    modeNow = "change color"
-                    if(lastGesture != labels[0]):
-                        colorNow += 1
-                        if(colorNow>len(paintColor)-1):
-                            colorNow = 0
+                #elif(labels[0]=='3'):
+                #    modeNow = "change color"
+                #    if(lastGesture != labels[0]):
+                #        colorNow += 1
+                #        if(colorNow>len(paintColor)-1):
+                #            colorNow = 0
 
-                        print("color: {}".format(paintColor[colorNow]))
+                #        print("color: {}".format(paintColor[colorNow]))
 
             lastGesture = labels[0]
 
